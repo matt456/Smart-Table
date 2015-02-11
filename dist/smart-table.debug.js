@@ -7,9 +7,11 @@
 
 ng.module('smart-table', []).run(['$templateCache', function ($templateCache) {
     $templateCache.put('template/smart-table/pagination.html',
-        '<div class="pagination" ng-if="pages.length >= 2"><ul class="pagination">' +
+        '<ul class="pagination pagination-sm no-top-margin no-bottom-margin" ng-if="pages.length >= 2">' +
         '<li ng-repeat="page in pages" ng-class="{active: page==currentPage}"><a ng-click="selectPage(page)">{{page}}</a></li>' +
-        '</ul></div>');
+        '</ul>');
+    $templateCache.put('template/smart-table/paginationextra.html',
+        '{{firstItem}} to {{lastItem}} of {{totalItems}}');	
 }]);
 
 
@@ -112,6 +114,10 @@ ng.module('smart-table')
       if (tableState.sort.predicate) {
         filtered = orderBy(filtered, tableState.sort.predicate, tableState.sort.reverse);
       }
+      
+      //MC record total of filtered items
+      pagination.total = filtered.length;
+      
       if (pagination.number !== undefined) {
         pagination.numberOfPages = filtered.length > 0 ? Math.ceil(filtered.length / pagination.number) : 1;
         pagination.start = pagination.start >= filtered.length ? (pagination.numberOfPages - 1) * pagination.number : pagination.start;
@@ -413,6 +419,40 @@ ng.module('smart-table')
   });
 
 ng.module('smart-table')
+  .directive('stPaginationExtra', function () {
+    return {
+      restrict: 'EA',
+      require: '^stTable',
+      scope: {},
+      templateUrl: function (element, attrs) {
+        if (attrs.stTemplate) {
+          return attrs.stTemplate;
+        }
+        return 'template/smart-table/paginationextra.html';
+      },
+      link: function (scope, element, attrs, ctrl) {
+
+        scope.firstItem = 1;
+	scope.lastItem = 1;
+	scope.totalItems = 1;
+
+        function redraw() {
+          var paginationState = ctrl.tableState().pagination;
+	  scope.firstItem = paginationState.start + 1;
+	  scope.lastItem = Math.min(paginationState.total, paginationState.start + paginationState.number);
+	  scope.totalItems = paginationState.total;
+        }
+
+        //table state --> view
+        scope.$watch(function () {
+          return ctrl.tableState().pagination;
+        }, redraw, true);
+	
+      }
+    };
+  });
+
+ng.module('smart-table')
   .directive('stPipe', function () {
     return {
       require: 'stTable',
@@ -425,7 +465,7 @@ ng.module('smart-table')
           ctrl.preventPipeOnWatch();
           ctrl.pipe = function () {
             return scope.stPipe(ctrl.tableState(), ctrl);
-          }
+          };
         },
 
         post: function (scope, element, attrs, ctrl) {

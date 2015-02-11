@@ -315,7 +315,7 @@ describe('stPagination directive', function () {
 
     it('should select a page', function () {
 
-      spyOn(controllerMock, 'slice').andCallThrough();
+      spyOn(controllerMock, 'slice').and.callThrough();
 
       var template = '<table st-table="rowCollection"><tfoot><tr><td id="pagination" st-pagination=""></td></tr></tfoot></table>';
       element = compile(template)(rootScope);
