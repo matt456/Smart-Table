@@ -18,7 +18,7 @@ ng.module('smart-table')
 
         function redraw() {
           var paginationState = ctrl.tableState().pagination;
-	  scope.firstItem = paginationState.start + 1;
+	  scope.firstItem = Math.min(paginationState.total, paginationState.start + 1);
 	  scope.lastItem = Math.min(paginationState.total, paginationState.start + paginationState.number);
 	  scope.totalItems = paginationState.total;
         }
