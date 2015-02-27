@@ -5,5 +5,7 @@ ng.module('smart-table', []).run(['$templateCache', function ($templateCache) {
         '</ul></nav>');
     $templateCache.put('template/smart-table/paginationextra.html',
         '{{firstItem}} to {{lastItem}} of {{totalItems}}');	
+    $templateCache.put('template/smart-table/paginationtotal.html',
+        '{{limitItems}} of {{totalItems}}');	
 }]);
 

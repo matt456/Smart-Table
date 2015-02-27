@@ -7,7 +7,7 @@ var insert = require('gulp-insert');
 var sourcemaps = require('gulp-sourcemaps');
 var stylish = require('jshint-stylish');
 var packageJson = require('./package.json');
-var pluginList = ['stSearch', 'stSelectRow', 'stSort', 'stPagination', 'stPaginationExtra', 'stPipe'];
+var pluginList = ['stSearch', 'stSelectRow', 'stSort', 'stPagination', 'stPaginationExtra', 'stPaginationTotal', 'stPipe'];
 var disFolder = './dist/';
 var src = (['smart-table.module', 'stTable']).concat(pluginList).map(function (val) {
     return 'src/' + val + '.js';
