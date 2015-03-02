@@ -49,6 +49,24 @@ ng.module('smart-table')
       });
     }
 
+	//MC this is horrible but a way of getting access to the value to see if it's been initialized in the directive
+	this.modelVal = function modelVal(whichmodel) {
+		if (angular.isDefined(whichmodel) && (whichmodel !== null))
+		{
+			var findDot = whichmodel.indexOf('.');
+			if (findDot !== -1)
+			{
+				var ctrlr = whichmodel.substr(0,findDot);
+				var varbl = whichmodel.substr(findDot+1);
+				if (angular.isDefined($scope[ctrlr][varbl]))
+				{
+					return $scope[ctrlr][varbl];
+				}
+			}
+		}
+		return null;
+	};    
+    
     /**
      * sort the rows
      * @param {Function | String} predicate - function or string which will be used as predicate for the sorting

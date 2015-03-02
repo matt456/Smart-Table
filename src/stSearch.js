@@ -10,6 +10,13 @@ ng.module('smart-table')
                 var promise = null;
                 var throttle = attr.stDelay || 400;
 
+		//MC initialize the search if values set for our model
+		var initVal = ctrl.modelVal(attr.ngModel);
+		if (initVal !== null)
+		{
+			tableCtrl.search(initVal, scope.predicate || '');
+		}
+		    
                 scope.$watch('predicate', function (newValue, oldValue) {
                     if (newValue !== oldValue) {
                         ctrl.tableState().search = {};
