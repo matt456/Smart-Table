@@ -11,7 +11,17 @@ ng.module('smart-table')
                 var throttle = attr.stDelay || 400;
 
 		//MC initialize the search if values set for our model
-		var initVal = ctrl.modelVal(attr.ngModel);
+		var endval = null;
+		if (angular.isDefined(attr.ngOptions))
+		{
+			var findDot = attr.ngOptions.lastIndexOf('.');
+			if (findDot !== -1)
+			{
+				endval = attr.ngOptions.substr(findDot + 1);
+			}
+		}
+		    
+		var initVal = ctrl.modelVal(attr.ngModel, endval);
 		if (initVal !== null)
 		{
 			tableCtrl.search(initVal, scope.predicate || '');

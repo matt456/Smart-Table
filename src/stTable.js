@@ -50,7 +50,7 @@ ng.module('smart-table')
     }
 
 	//MC this is horrible but a way of getting access to the value to see if it's been initialized in the directive
-	this.modelVal = function modelVal(whichmodel) {
+	this.modelVal = function modelVal(whichmodel, endval) {
 		if (angular.isDefined(whichmodel) && (whichmodel !== null))
 		{
 			var findDot = whichmodel.indexOf('.');
@@ -60,7 +60,18 @@ ng.module('smart-table')
 				var varbl = whichmodel.substr(findDot+1);
 				if (angular.isDefined($scope[ctrlr][varbl]))
 				{
-					return $scope[ctrlr][varbl];
+					if (endval === null)
+					{
+						return $scope[ctrlr][varbl];
+					}
+					if ($scope[ctrlr][varbl] === null)
+					{
+						return null;
+					}
+					if (angular.isDefined($scope[ctrlr][varbl][endval]))
+					{
+						return $scope[ctrlr][varbl][endval];
+					}
 				}
 			}
 		}
